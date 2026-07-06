@@ -66,6 +66,57 @@ def listar_tarefas():
 
     return jsonify(lita_tarefas), 200
 
+@app.route('/tarefas/int:id_tarefa', methods=['GET'])
+def atualizar_tarefas_id():
+    id = request.args.get('id')
+
+
+
+@app.route('/tarefas/<int:id_tarefa>', methods=['PUT'])
+def atualizar_tarefas(id_tarefa):
+    dados = request.get_json()
+
+    if not dados:
+        return jsonify({'erro': 'Nenhum dados foi enviado'}), 400
+
+    campos_obrigatorios = ["titulo", "descricao", "concluida"]
+    for campo in campos_obrigatorios:
+        if campo not in dados:
+            return jsonify({'erro':f'Campo{campo} é obrigatorio'}), 400
+
+    tarefa = db.session.get(Tarefas, id_tarefa)
+
+    if tarefa is None:
+        return jsonify({'erro': 'Tarefa não encontrada'}), 404
+
+    tarefa.titulo = dados['titulo']
+    tarefa.descricao = dados['descricao']
+    tarefa.concluida = dados['concluida']
+
+    db.session.commit()
+
+    return jsonify(tarefa.to_dict()), 201
+
+@app.route('/tarefas/<int:id_tarefa>', methods=['PATCH'])
+def alterar_tarefas(id_tarefa):
+    dados = request.get_json()
+    if not dados:
+        return jsonify({'erro': 'Nenhum dados foi enviado'}), 400
+
+    tarefa = db.session.get(Tarefas, id_tarefa)
+
+    if tarefa is None:
+        return jsonify({'erro':'Tarefa não encontrada'}), 404
+
+    if 'titulo' in dados:
+        tarefa.titulo = dados['titulo']
+    if 'descricao' in dados:
+        tarefa.descricao = dados['descricao']
+    if 'concluida' in dados:
+        tarefa.concluida = dados['concluida']
+
+    db.session.commit()
+    return jsonify(tarefa.to_dict()), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
