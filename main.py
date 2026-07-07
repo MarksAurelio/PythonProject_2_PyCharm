@@ -1,15 +1,38 @@
 from flask import Flask, jsonify, request
-from models import db, Tarefas
+from models import db, Tarefas, Alunos
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tarefas.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+#'sqlite:///tarefas.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
+""" 
+Criar a classe Alunos no model.py. Depois:
+1) Criar rotas GET para alunos
+2) Criar rotas GET para alunos específico (por ID)
+3) Criar rota POST para alunos
+4) Criar rota PUT para alunos
+5) Criar rota PATH para alunos
+6) Criar rota DELETE para alunos
+"""
 
+@app.route('/alunos', methods=['GET'])
+def listar_alunos():
+    consulta = db.select(Alunos).order_by(Alunos.id)
+    resultado = db.session.execute(consulta)
+    alunos = resultado.scalars().all()
+    lista_alunos = []
+    for aluno in alunos:
+        lista_alunos.append(aluno.to_dict())
+    return jsonify(lista_alunos), 200
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({'mensagem': 'API com Bando de Dados funcionando'}), 200
@@ -69,7 +92,6 @@ def listar_tarefas():
 @app.route('/tarefas/int:id_tarefa', methods=['GET'])
 def atualizar_tarefas_id():
     id = request.args.get('id')
-
 
 
 @app.route('/tarefas/<int:id_tarefa>', methods=['PUT'])

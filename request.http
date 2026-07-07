@@ -1,8 +1,2 @@
-POST localhost:5000/tarefas
+GET localhost:5000/alunos
 Content-Type: application/json
-
-{
-  "titulo": "Minha primeira tarefa",
-  "descricao": "Inserindo primeira tarefa via POST",
-  "concluida": true
-}
