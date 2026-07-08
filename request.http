@@ -1,12 +1,12 @@
 ### 1) Buscar TODOS os alunos
 GET http://localhost:5000/alunos
-Accept: application/json
+Content-Type: application/json
 
 ###
 
 ### 2) Buscar aluno específico por ID (Ex: ID 1)
 GET http://localhost:5000/alunos/1
-Accept: application/json
+Content-Type: application/json
 
 ###
 
@@ -16,7 +16,8 @@ Content-Type: application/json
 
 {
   "nome": "João Silva",
-  "email": "joao@email.com"
+  "email": "joao@email.com",
+  "telefone": "61999999999"
 }
 
 ###
@@ -28,7 +29,7 @@ Content-Type: application/json
 {
   "nome": "João da Silva",
   "email": "joao.silva@email.com",
-  "telefone": "11999999999"
+  "telefone": "618888888888"
 }
 
 ###
@@ -38,7 +39,7 @@ PATCH http://localhost:5000/alunos/1
 Content-Type: application/json
 
 {
-  "telefone": "11888888888"
+  "telefone": "617777777777"
 }
 
 ###
