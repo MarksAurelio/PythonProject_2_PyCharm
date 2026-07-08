@@ -1,6 +1,3 @@
-GET localhost:5000/alunos
-Content-Type: application/json
-
 ### 1) Buscar TODOS os alunos
 GET http://localhost:5000/alunos
 Accept: application/json
