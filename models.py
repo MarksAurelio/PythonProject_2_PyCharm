@@ -16,6 +16,7 @@ class Tarefas (db.Model):
             'descricao': self.descricao,
             'concluida': self.concluida
         }
+# Criar a classe Alunos no model.py. Depois:
 
 class Alunos (db.Model):
     __tablename__ = 'alunos'

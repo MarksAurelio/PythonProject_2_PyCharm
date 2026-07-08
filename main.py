@@ -14,25 +14,102 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-""" 
-Criar a classe Alunos no model.py. Depois:
-1) Criar rotas GET para alunos
-2) Criar rotas GET para alunos específico (por ID)
-3) Criar rota POST para alunos
-4) Criar rota PUT para alunos
-5) Criar rota PATH para alunos
-6) Criar rota DELETE para alunos
-"""
 
+# 1) Criar rotas GET para alunos
 @app.route('/alunos', methods=['GET'])
 def listar_alunos():
     consulta = db.select(Alunos).order_by(Alunos.id)
     resultado = db.session.execute(consulta)
     alunos = resultado.scalars().all()
     lista_alunos = []
+
     for aluno in alunos:
         lista_alunos.append(aluno.to_dict())
+
     return jsonify(lista_alunos), 200
+
+# 2) Criar rotas GET para alunos específico (por ID)
+@app.route('/alunos/int:id_aluno', methods=['GET'])
+def localizar_aluno_id(id_aluno):
+    aluno = db.session.get(Alunos, id_aluno)
+
+    if aluno is None:
+        return jsonify({"erro":"Aluno não encontrado"}), 404
+    return jsonify(aluno.to_dict()), 200
+
+# 3) Criar rota POST para alunos
+@app.route('/alunos/int:id_aluno', methods=['POST'])
+def criar_aluno(id_aluno):
+    dados = request.get_json()
+
+    if not dados:
+        return jsonify({'erro': 'Dados imcompletos'}), 400
+
+    novo_aluno = Alunos(
+        nome=dados['nome'],
+        email=dados['email'],
+        telefone=dados['telefone']
+    )
+    db.session.add(novo_aluno)
+    db.session.commit()
+
+    return jsonify(novo_aluno.to_dict()), 201
+
+# 4) Criar rota PUT para alunos
+@app.route('/alunos/int:id_aluno', methods=['PUT'])
+def atualizar_aluno(id_aluno):
+    aluno = db.session.get(Alunos, id_aluno)
+    if aluno is None:
+        return jsonify({"erro":"Aluno não encontrado"})
+
+    dados = request.get_json()
+    aluno.nome = dados['nome']
+    aluno.email = dados['email']
+    aluno.telefone = dados['telefone']
+
+    db.session.commit()
+
+    return jsonify(aluno.to_dict()), 200
+
+# 5) Criar rota PATH para alunos
+@app.route('/alunos/int:id_aluno', methods=['PATCH'])
+def atualizar_parcial_aluno(id_aluno):
+    aluno = db.session.get(Alunos, id_aluno)
+
+    if aluno is None:
+        return jsonify({"erro": "Aluno não encontrado"}), 404
+
+    dados = request.get_json()
+
+    if 'nome' in dados:
+        aluno.nome = dados['nome']
+
+    if 'email' in dados:
+        aluno.email = dados['email']
+
+    if 'telefone' in dados:
+        aluno.telefone = dados['telefone']
+
+    db.session.commit()
+
+    return jsonify(aluno.to_dict()), 200
+
+# 6) Criar rota DELETE para alunos
+@app.route('/alunos/int:id_aluno', methods=['DELETE'])
+def deletar_aluno(id_aluno):
+    aluno = db.session.get(Alunos, id_aluno)
+
+    if aluno is None:
+        return jsonify({"erro": "Aluno não encontrado"}), 400
+
+    dados = request.get_json()
+
+    db.session.delete(dados)
+
+    db.session.commit()
+
+    return jsonify({"mensagem":"Aluno deletado com sucesso"}), 200
+
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({'mensagem': 'API com Bando de Dados funcionando'}), 200

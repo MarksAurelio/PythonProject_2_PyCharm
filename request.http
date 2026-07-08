@@ -1,2 +1,50 @@
 GET localhost:5000/alunos
 Content-Type: application/json
+
+### 1) Buscar TODOS os alunos
+GET http://localhost:5000/alunos
+Accept: application/json
+
+###
+
+### 2) Buscar aluno específico por ID (Ex: ID 1)
+GET http://localhost:5000/alunos/1
+Accept: application/json
+
+###
+
+### 3) Criar um novo aluno (POST)
+POST http://localhost:5000/alunos
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@email.com"
+}
+
+###
+
+### 4) Atualizar aluno completamente (PUT)
+PUT http://localhost:5000/alunos/1
+Content-Type: application/json
+
+{
+  "nome": "João da Silva",
+  "email": "joao.silva@email.com",
+  "telefone": "11999999999"
+}
+
+###
+
+### 5) Atualizar aluno parcialmente (PATCH)
+PATCH http://localhost:5000/alunos/1
+Content-Type: application/json
+
+{
+  "telefone": "11888888888"
+}
+
+###
+
+### 6) Deletar um aluno por ID
+DELETE http://localhost:5000/alunos/1
