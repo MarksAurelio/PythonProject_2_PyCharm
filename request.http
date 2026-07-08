@@ -1,10 +1,11 @@
-### 1) Buscar TODOS os alunos
+###
+### 1) Buscar todos os alunos (GET)
 GET http://localhost:5000/alunos
 Content-Type: application/json
 
 ###
 
-### 2) Buscar aluno específico por ID (Ex: ID 1)
+### 2) Buscar aluno específico por ID (GET)
 GET http://localhost:5000/alunos/1
 Content-Type: application/json
 
@@ -44,5 +45,5 @@ Content-Type: application/json
 
 ###
 
-### 6) Deletar um aluno por ID
+### 6) Deletar um aluno por ID (DELETE)
 DELETE http://localhost:5000/alunos/1
